@@ -5,13 +5,12 @@ using UnityEngine;
 
 public class GridMap : MonoBehaviour {
 
+    public Node[,] Grid;
+    public List<Node> Path;
     public Vector2 GridSize;
     public LayerMask Obstacles;
 
     public float NodeDiameter = 1;
-
-    public Node[,] grid;
-    public List<Node> path;
 
     Vector3 bottomLeft;
 
@@ -29,7 +28,7 @@ public class GridMap : MonoBehaviour {
 
     private void CreateGrid()
     {
-        grid = new Node[nodeGridSizeX, nodeGridSizeY];
+        Grid = new Node[nodeGridSizeX, nodeGridSizeY];
 
         float bottomLeftX = transform.position.x - GridSize.x / 2;
         float bottomLeftY = transform.position.z - GridSize.y / 2;
@@ -45,7 +44,7 @@ public class GridMap : MonoBehaviour {
 
                 bool isObstacle = Physics.CheckSphere(worldNodePosition, NodeDiameter / 2, Obstacles);
 
-                grid[x, y] = new Node(worldNodePosition, x, y, isObstacle);
+                Grid[x, y] = new Node(worldNodePosition, x, y, isObstacle);
             }
         }
     }
@@ -57,13 +56,13 @@ public class GridMap : MonoBehaviour {
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(GridSize.x, 1, GridSize.y));
 
-        if (grid != null)
+        if (Grid != null)
         {
-            foreach (Node n in grid)
+            foreach (Node n in Grid)
             {
                 Color color = n.IsObstacle ? Color.red : Color.green;
 
-                if (path != null && path.Contains(n))
+                if (Path != null && Path.Contains(n))
                     color = Color.blue;
 
                 Gizmos.color = color;
